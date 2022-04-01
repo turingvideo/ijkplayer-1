@@ -26,6 +26,7 @@
 #include "ffpipeline_ios.h"
 #include <mach/mach_time.h>
 #include "libavformat/avc.h"
+#include "libavformat/hevc.h"
 #include "ijksdl_vout_ios_gles2.h"
 #include "h264_sps_parser.h"
 #include "ijkplayer/ff_ffplay_debug.h"
@@ -1146,7 +1147,13 @@ static int vtbformat_init(VTBFormatDesc *fmt_desc, AVCodecParameters *codecpar)
                     }
 
                     fmt_desc->convert_bytestream = true;
-                    ff_isom_write_avcc(pb, extradata, extrasize);
+                    // ff_isom_write_avcc(pb, extradata, extrasize);
+                    if (codec == AV_CODEC_ID_HEVC) {
+                        ff_isom_write_hvcc(pb, extradata, extrasize, 1);
+                    } else {
+                        ff_isom_write_avcc(pb, extradata, extrasize);
+                    }
+
                     extradata = NULL;
 
                     extrasize = avio_close_dyn_buf(pb, &extradata);
