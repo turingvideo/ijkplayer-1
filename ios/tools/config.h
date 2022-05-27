@@ -40,7 +40,7 @@
 #   endif
 
 #elif defined(__i386__)
-#   include "i386/config.h"
+// #   include "i386/config.h"
 #else
 #   error Unsupport architecture
 #endif
