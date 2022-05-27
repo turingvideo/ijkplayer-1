@@ -29,7 +29,7 @@
 #ifdef CONFIG_AVFILTER
 #undef CONFIG_AVFILTER
 #endif
-#define CONFIG_AVFILTER 0
+
 
 #ifdef FFP_MERGE
 #undef FFP_MERGE
