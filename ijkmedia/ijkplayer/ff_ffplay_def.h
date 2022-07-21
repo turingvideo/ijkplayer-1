@@ -127,6 +127,11 @@
 /* polls for possible required screen refresh at least this often, should be less than 1/fps */
 #define REFRESH_RATE 0.01
 
+/* video track only situation, speed could be greater than 2.0 its depends on decoder capability */
+/* if speed > 2.0, vout polling rate should less than 10ms for prevent missing the vsync */
+#define VIDEO_ONLY_FAST_POLLING_RATE 0.001
+#define ADJUST_POLLING_RATE_THRESHOLD 2.0
+
 /* NOTE: the size must be big enough to compensate the hardware audio buffersize size */
 /* TODO: We assume that a decoded and resampled frame fits into this buffer */
 #define SAMPLE_ARRAY_SIZE (8 * 65536)

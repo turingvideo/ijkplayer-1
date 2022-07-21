@@ -1355,6 +1355,11 @@ static void video_refresh(FFPlayer *opaque, double *remaining_time)
         *remaining_time = FFMIN(*remaining_time, is->last_vis_time + ffp->rdftspeed - time);
     }
 
+        if (ffp->pf_playback_rate > ADJUST_POLLING_RATE_THRESHOLD &&
+            !is->audio_st) {
+            *remaining_time = VIDEO_ONLY_FAST_POLLING_RATE;
+        }
+
     if (is->video_st) {
 retry:
         if (frame_queue_nb_remaining(&is->pictq) == 0) {
@@ -4915,6 +4920,15 @@ void ffp_set_playback_rate(FFPlayer *ffp, float rate)
     av_log(ffp, AV_LOG_INFO, "Playback rate: %f\n", rate);
     ffp->pf_playback_rate = rate;
     ffp->pf_playback_rate_changed = 1;
+
+    if (ffp->is->audio_stream < 0) {
+        // if non audio track be selectd, default sync clock is external clock.
+        // BTW: if choose video master sync type, non clock sync, video freerun.
+        // ergo, setclockspeed is noneffective for this situation.
+        av_log(ffp, AV_LOG_INFO, "didn't select an audio track, setclock speed instead");
+        set_clock_speed(&ffp->is->extclk, (double)rate);
+    }
+
 }
 
 void ffp_set_playback_volume(FFPlayer *ffp, float volume)
