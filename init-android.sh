@@ -18,8 +18,8 @@
 
 # IJK_FFMPEG_UPSTREAM=git://git.videolan.org/ffmpeg.git
 IJK_FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
-IJK_FFMPEG_FORK=https://github.com/befovy/FFmpeg.git
-IJK_FFMPEG_COMMIT=ff4.0--ijk0.8.8--20211030--926
+IJK_FFMPEG_FORK=https://github.com/cnwangxiao/FFmpeg.git
+IJK_FFMPEG_COMMIT=ff4.0--ijk0.8.8-20220721-001
 IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg
 
 set -e
@@ -45,7 +45,7 @@ pull_fork "arm64"
 pull_fork "x86"
 pull_fork "x86_64"
 
-./init-config.sh
+#./init-config.sh
 ./init/init-libyuv.sh
 ./init/init-android-soundtouch.sh
 ./init/init-android-boringssl.sh

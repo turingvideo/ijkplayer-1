@@ -20,8 +20,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASEDIR=$(dirname "$DIR")
 
 #IJK_OPENSSL_UPSTREAM=https://github.com/openssl/openssl
-IJK_OPENSSL_UPSTREAM=https://boringssl.googlesource.com/boringssl
-IJK_OPENSSL_FORK=https://boringssl.googlesource.com/boringssl
+IJK_OPENSSL_UPSTREAM=https://github.com/google/boringssl.git
+IJK_OPENSSL_FORK=https://github.com/google/boringssl.git
 IJK_OPENSSL_COMMIT=7f02881e9 #fips-android-20191020  #tag: OpenSSL_1_0_2r
 IJK_OPENSSL_LOCAL_REPO=$BASEDIR/extra/boringssl
 
