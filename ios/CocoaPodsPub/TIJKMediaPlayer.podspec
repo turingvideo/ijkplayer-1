@@ -83,7 +83,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source = { :http => "https://github.com/turingvideo/TIJKMediaPlayer/releases/download/t0.8.11/IJKMediaPlayer.tar.gz" }
+  spec.source = { :http => "https://github.com/turingvideo/ijkplayer-for-flutter/releases/download/t0.8.11/IJKMediaPlayer.tar.gz" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
