@@ -85,6 +85,7 @@ jobs:
         export ANDROID_NDK=$ANDROID_HOME/ndk/16.1.4479499/
         ./gradlew build -PIJK_CXX_STL=c++_shared
         ./gradlew assembleRelease -PIJK_CXX_STL=c++_shared
+        zip -r Symbols.zip fijkplayer-full/build/intermediates/cmake/release/obj
 
     - name: Upload apk
       uses: actions/upload-artifact@v2
@@ -93,3 +94,4 @@ jobs:
         path: |
           android/ijkplayer/ijkplayer-example/build/outputs/apk/release/ijkplayer-example-release.apk
           android/ijkplayer/fijkplayer-full/build/outputs/aar/fijkplayer-full-release.aar
+          android/ijkplayer/Symbols.zip
