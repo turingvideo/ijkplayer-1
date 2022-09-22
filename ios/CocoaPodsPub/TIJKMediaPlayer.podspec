@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "TIJKMediaPlayer"
-  spec.version      = "0.8.11"
+  spec.version      = "0.8.12"
   spec.summary      = "A short description of TIJKMediaPlayer."
 
   # This description is used to generate tags and improve search results.
@@ -83,7 +83,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source = { :http => "https://github.com/turingvideo/ijkplayer-for-flutter/releases/download/t0.8.11/IJKMediaPlayer.tar.gz" }
+  spec.source = { :http => "https://github.com/turingvideo/ijkplayer-for-flutter/releases/download/t0.8.12/IJKMediaPlayer.tar.gz" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
