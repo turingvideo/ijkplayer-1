@@ -1420,7 +1420,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
             }
 
             if (bestCodec.mRank < IjkMediaCodecInfo.RANK_LAST_CHANCE) {
-                DebugLog.w(TAG, String.format(Locale.US, "unaccetable codec: %s", bestCodec.mCodecInfo.getName()));
+                DebugLog.w(TAG, String.format(Locale.US, "unacceptable codec: %s", bestCodec.mCodecInfo.getName()));
                 return null;
             }
 
