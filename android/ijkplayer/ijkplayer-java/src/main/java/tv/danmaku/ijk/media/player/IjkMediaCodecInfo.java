@@ -149,7 +149,9 @@ public class IjkMediaCodecInfo {
 
         name = name.toLowerCase(Locale.US);
         int rank = RANK_NO_SENSE;
-        if (!name.startsWith("omx.")) {
+        if (name.startsWith("c2.rk.")) {
+            rank = RANK_ACCEPTABLE;
+        } else if (!name.startsWith("omx.")) {
             rank = RANK_NON_STANDARD;
         } else if (name.startsWith("omx.pv")) {
             rank = RANK_SOFTWARE;
