@@ -226,7 +226,7 @@ if [ ! -f "$FF_TOOLCHAIN_TOUCH" ]; then
     #     $FF_MAKE_TOOLCHAIN_FLAGS \
     #     --platform=$FF_ANDROID_PLATFORM \
     #     --toolchain=$FF_TOOLCHAIN_NAME
-    python $ANDROID_NDK/build/tools/make_standalone_toolchain.py \
+    python3 $ANDROID_NDK/build/tools/make_standalone_toolchain.py \
         --arch ${FF_TOOLCHAIN_ARCH} \
         --api ${FF_ANDROID_PLATFORM} \
         --stl libc++ \
