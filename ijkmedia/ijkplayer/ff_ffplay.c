@@ -3387,28 +3387,9 @@ static int read_thread(void *arg)
     } else {
         is->max_cached_duration = 0;
     }
-
-    if (true || ffp->show_status)
-        av_dump_format(ic, 0, is->filename, 0);
-    
-    // 每次读取一个pkt，都去判断处理
-    // TODO:优化，不用每次都调用
-    if (is->max_cached_duration > 0) {
-        control_queue_duration(ffp, is);
-    }
-    if (pkt->stream_index == is->audio_stream && pkt_in_play_range) {
-        packet_queue_put(&is->audioq, pkt);
-    } else if (pkt->stream_index == is->video_stream && pkt_in_play_range
-               && !(is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC))) {
-        packet_queue_put(&is->videoq, pkt);
-#ifdef FFP_MERGE
-    } else if (pkt->stream_index == is->subtitle_stream && pkt_in_play_range) {
-        packet_queue_put(&is->subtitleq, pkt);
-#endif
-    } else {
-        av_packet_unref(pkt);
-    }
 // END   =========== Add control cache queue ============
+    
+    av_dump_format(ic, 0, is->filename, 0);
 
     int video_stream_count = 0;
     int h264_stream_count = 0;
@@ -3794,6 +3775,11 @@ static int read_thread(void *arg)
                 av_q2d(ic->streams[pkt->stream_index]->time_base) -
                 (double)(ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0) / 1000000
                 <= ((double)ffp->duration / 1000000);
+        
+        if (is->max_cached_duration > 0) {
+            control_queue_duration(ffp, is);
+        }
+            
         if (pkt->stream_index == is->audio_stream && pkt_in_play_range) {
             packet_queue_put(&is->audioq, pkt);
         } else if (pkt->stream_index == is->video_stream && pkt_in_play_range
