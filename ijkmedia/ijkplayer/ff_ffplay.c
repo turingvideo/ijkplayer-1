@@ -265,7 +265,7 @@ static void control_video_queue_duration(FFPlayer *ffp, VideoState *is) {
     if (cached_duration > is->max_cached_duration) {
         // drop
         av_log(NULL, AV_LOG_INFO, "233 video cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
-        drop_to_pts = is->videoq.last_pkt->pkt.pts - (duration / 2);  // 这里删掉一半，你也可以自己修改，依据设置进来的max_cached_duration大小
+        drop_to_pts = is->videoq.last_pkt->pkt.pts;  // 这里删掉一半，你也可以自己修改，依据设置进来的max_cached_duration大小
         drop_queue_until_pts(&is->videoq, drop_to_pts);
     }
     
