@@ -1497,6 +1497,8 @@ retry:
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
             delay = compute_target_delay(ffp, last_duration, is);
+            if (delay > 1.0)
+                delay = 0.01;
             av_log(NULL, AV_LOG_INFO, "1500 compute target delay = %f, remaining frame = %d\n", delay, frame_queue_nb_remaining(&is->pictq));
 
             int64_t time_us = av_gettime_relative();
