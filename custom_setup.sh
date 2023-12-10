@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=t0.9.7-android
+VERSION=t0.9.8-android
 
 RELEASE_VERSION=${VERSION}
 
