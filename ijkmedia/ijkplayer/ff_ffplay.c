@@ -1497,7 +1497,7 @@ retry:
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
             delay = compute_target_delay(ffp, last_duration, is);
-            av_log(NULL, AV_LOG_INFO, "1500 compute target delay = %f, remaining frame = %ld\n", delay, frame_queue_nb_remaining(&is->pictq));
+            av_log(NULL, AV_LOG_INFO, "1500 compute target delay = %f, remaining frame = %d\n", delay, frame_queue_nb_remaining(&is->pictq));
 
             int64_t time_us = av_gettime_relative();
             if (!is->audio_st)
