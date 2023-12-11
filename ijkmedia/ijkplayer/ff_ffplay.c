@@ -1497,9 +1497,8 @@ retry:
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
             delay = compute_target_delay(ffp, last_duration, is);
-            if (delay > 1.0)
-                delay = 0.01;
             av_log(NULL, AV_LOG_INFO, "1500 compute target delay = %f, remaining frame = %d\n", delay, frame_queue_nb_remaining(&is->pictq));
+            delay = 0;
 
             int64_t time_us = av_gettime_relative();
             if (!is->audio_st)
@@ -3974,7 +3973,7 @@ static int video_refresh_thread(void *arg)
             is->force_refresh = true;
         }
 #endif
-        if (is->show_mode != SHOW_MODE_NONE && (!is->paused || is->force_refresh))
+        if (is->show_mode != SHOW_MODE_NONE && (true || is->force_refresh))
             video_refresh(ffp, &remaining_time);
     }
     if (ffp->vout)
