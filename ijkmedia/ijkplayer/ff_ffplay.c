@@ -206,7 +206,7 @@ static int packet_queue_put_private(PacketQueue *q, AVPacket *pkt)
 
 // START=========== Add control cache queue ============
 #pragma mark 添加控制缓存队列的方法
-static void drop_queue_until_pts(PacketQueue *q, int64_t drop_to_pts) {
+static void drop_queue_until_pts(PacketQueue *q, MyAVPacketList* drop_to_pkt, int64_t drop_to_pts, int64_t* droped_pts) {
     MyAVPacketList *pkt1 = NULL;
     int del_nb_packets = 0;
     for (;;) {
@@ -214,12 +214,11 @@ static void drop_queue_until_pts(PacketQueue *q, int64_t drop_to_pts) {
         if (!pkt1) {
             break;
         }
-        // video need key frame? 这里如果不判断是否是关键帧会导致视频画面花屏。但是这样会导致全部清空的可能也会出现花屏
-        // 所以这里推流端设置好 GOP 的大小，如果 max_cached_duration > 2 * GOP，可以尽可能规避全部清空
-        // 也可以在调用control_queue_duration之前判断新进来的视频pkt是否是关键帧，这样即使全部清空了也不会花屏
-        if ((pkt1->pkt.flags & AV_PKT_FLAG_KEY) && pkt1->pkt.pts >= drop_to_pts) {
-            //        if (pkt1->pkt.pts >= drop_to_pts) {
+        if (drop_to_pkt == pkt1 || ((pkt1->pkt.flags & AV_PKT_FLAG_KEY) && pkt1->pkt.pts >= drop_to_pts)) {
             break;
+        }
+        if (droped_pts) {
+            *droped_pts = pkt1->pkt.pts;
         }
         q->first_pkt = pkt1->next;
         if (!q->first_pkt)
@@ -237,7 +236,67 @@ static void drop_queue_until_pts(PacketQueue *q, int64_t drop_to_pts) {
         q->recycle_pkt = pkt1;
 #endif
     }
-    av_log(NULL, AV_LOG_INFO, "233 del_nb_packets = %d.\n", del_nb_packets);
+    av_log(NULL, AV_LOG_INFO, "del_nb_packets = %d.\n", del_nb_packets);
+}
+
+static void control_media_queue_duration(VideoState *is) {
+    int time_base_valid = 0;
+    int64_t cached_duration = -1;
+    int nb_packets = 0;
+    int64_t duration = 0;
+    int64_t drop_to_pts = 0, droped_video_pts = 0;
+    int need_drop = 0;
+
+    SDL_LockMutex(is->videoq.mutex);
+
+    time_base_valid = is->video_st->time_base.den > 0 && is->video_st->time_base.num > 0;
+    nb_packets = is->videoq.nb_packets;
+
+    if (time_base_valid) {
+        if (is->videoq.first_pkt && is->videoq.last_pkt) {
+            duration = is->videoq.last_pkt->pkt.pts - is->videoq.first_pkt->pkt.pts;
+            cached_duration = duration * av_q2d(is->video_st->time_base) * 1000;
+        }
+    }
+
+
+    int64_t first_pts = 0;
+    MyAVPacketList* drop_to_pkt = NULL;
+    MyAVPacketList* pkt_header = is->videoq.first_pkt;
+    while(pkt_header) {
+        if (!first_pts) {
+            if (pkt_header->pkt.flags & AV_PKT_FLAG_KEY) {
+                first_pts = pkt_header->pkt.pts;
+            }
+        } else if (pkt_header->pkt.flags & AV_PKT_FLAG_KEY) {
+            av_log(NULL, AV_LOG_INFO, "ijk discard strategy, find two key frames\n");
+            drop_to_pkt = pkt_header;
+        }
+    }
+
+    if (cached_duration > is->max_cached_duration || drop_to_pkt) {
+        need_drop = 1;
+        drop_to_pts = is->videoq.last_pkt->pkt.pts;
+        droped_video_pts = drop_to_pts;
+        drop_queue_until_pts(&is->videoq, drop_to_pkt, drop_to_pts, &droped_video_pts);
+        av_log(NULL, AV_LOG_INFO, "ijk discard strategy, video duration = %ld, nb_packet from %d to %d\n",
+               cached_duration, nb_packets, is->videoq.nb_packets);
+    }
+    SDL_UnlockMutex(is->videoq.mutex);
+
+    if (need_drop) {
+        SDL_LockMutex(is->audioq.mutex);
+        int nb_audio_packets = is->audioq.nb_packets;
+        int64_t droped_audio_pts = 0;
+        if (is->audio_st->time_base.num && is->audio_st->time_base.den) {
+            droped_audio_pts = av_rescale_q(droped_video_pts, is->video_st->time_base, is->audio_st->time_base);
+        }
+        if (is->audio_stream) {
+            drop_queue_until_pts(&is->audioq, NULL, droped_audio_pts, NULL);
+        }
+        av_log(NULL, AV_LOG_INFO, "ijk discard strategy, audio nb_packet from %d to %d\n", nb_audio_packets, is->audioq.nb_packets);
+        SDL_UnlockMutex(is->audioq.mutex);
+    }
 }
 
 static void control_video_queue_duration(FFPlayer *ffp, VideoState *is) {
@@ -266,7 +325,7 @@ static void control_video_queue_duration(FFPlayer *ffp, VideoState *is) {
         // drop
         av_log(NULL, AV_LOG_INFO, "233 video cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
         drop_to_pts = is->videoq.last_pkt->pkt.pts - duration;  // 这里删掉一半，你也可以自己修改，依据设置进来的max_cached_duration大小
-        drop_queue_until_pts(&is->videoq, drop_to_pts);
+        drop_queue_until_pts(&is->videoq, NULL, drop_to_pts, NULL);
     }
     
     //Unlock
@@ -298,7 +357,7 @@ static void control_audio_queue_duration(FFPlayer *ffp, VideoState *is) {
         // drop
         av_log(NULL, AV_LOG_INFO, "233 audio cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
         drop_to_pts = is->audioq.last_pkt->pkt.pts - (duration / 2);
-        drop_queue_until_pts(&is->audioq, drop_to_pts);
+        drop_queue_until_pts(&is->audioq, NULL, drop_to_pts, NULL);
     }
     
     //Unlock
@@ -310,13 +369,15 @@ static void control_queue_duration(FFPlayer *ffp, VideoState *is) {
         return;
     }
     
-    if (is->audio_st) {
-        return control_audio_queue_duration(ffp, is);
-    }
+//    if (is->audio_st) {
+//        return control_audio_queue_duration(ffp, is);
+//    }
+//    if (is->video_st) {
+//        return control_video_queue_duration(ffp, is);
+//    }
     if (is->video_st) {
-        return control_video_queue_duration(ffp, is);
+        return control_media_queue_duration(is);
     }
-    
 }
 // END ============ Add control cache queue =============
 
