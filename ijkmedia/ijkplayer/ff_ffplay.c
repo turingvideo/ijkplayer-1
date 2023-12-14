@@ -261,7 +261,6 @@ static void control_video_queue_duration(FFPlayer *ffp, VideoState *is) {
             cached_duration = duration * av_q2d(is->video_st->time_base) * 1000;
         }
     }
-    av_log(NULL, AV_LOG_INFO, "233 video cached_duration = %ld\n", cached_duration);
     if (cached_duration > is->max_cached_duration) {
         // drop
         av_log(NULL, AV_LOG_INFO, "233 video cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
@@ -1499,7 +1498,6 @@ retry:
             delay = compute_target_delay(ffp, last_duration, is);
             if (delay > 1.0)
                 delay = 0.01;
-            av_log(NULL, AV_LOG_INFO, "1500 compute target delay = %f, remaining frame = %d\n", delay, frame_queue_nb_remaining(&is->pictq));
 
             int64_t time_us = av_gettime_relative();
             if (!is->audio_st)
