@@ -1380,7 +1380,7 @@ retry:
 
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
-            delay = compute_target_delay(ffp, last_duration, is);
+            delay = 0;// compute_target_delay(ffp, last_duration, is);
 
             int64_t time_us = av_gettime_relative();
             if (!is->audio_st)
