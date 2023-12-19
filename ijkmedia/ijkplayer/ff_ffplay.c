@@ -1495,7 +1495,7 @@ retry:
 
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
-            delay = 0;// compute_target_delay(ffp, last_duration, is);
+            delay = compute_target_delay(ffp, last_duration, is);
             if (delay > 0.1)
                 delay = 0.01;
 
