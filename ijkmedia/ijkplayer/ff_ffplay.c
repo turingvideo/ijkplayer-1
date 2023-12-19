@@ -1496,7 +1496,7 @@ retry:
             /* compute nominal last_duration */
             last_duration = vp_duration(is, lastvp, vp);
             delay = compute_target_delay(ffp, last_duration, is);
-            if (delay > 1.0)
+            if (delay > 0.1)
                 delay = 0.01;
 
             int64_t time_us = av_gettime_relative();
