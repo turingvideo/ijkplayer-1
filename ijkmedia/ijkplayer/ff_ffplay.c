@@ -326,9 +326,9 @@ static int packet_queue_put(PacketQueue *q, AVPacket *pkt)
     if (!q->is_first_key_frame_coming) {
         if (is_key_frame) {
             q->is_first_key_frame_coming = true;
-            av_log(NULL, AV_LOG_INFO, "This is first I frame, size:%d.\n", pkt->size);
+            ALOGI("This is first I frame, size:%d.\n", pkt->size);
         } else {
-            av_log(NULL, AV_LOG_WARNING, "This is P frame, size:%d, wait first key frame\n", pkt->size);
+            ALOGI("This is P frame, size:%d, wait first key frame\n", pkt->size);
             return 0;
         }
     }
