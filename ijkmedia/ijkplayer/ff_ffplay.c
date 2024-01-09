@@ -293,6 +293,8 @@ static void control_audio_queue_duration(FFPlayer *ffp, VideoState *is) {
         }
     }
     
+    av_log(NULL, AV_LOG_INFO, "233 audio cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
+
     if (cached_duration > is->max_cached_duration) {
         // drop
         av_log(NULL, AV_LOG_INFO, "233 audio cached_duration = %ld, nb_packets = %d.\n", cached_duration, nb_packets);
@@ -326,9 +328,9 @@ static int packet_queue_put(PacketQueue *q, AVPacket *pkt)
     if (!q->is_first_key_frame_coming) {
         if (is_key_frame) {
             q->is_first_key_frame_coming = true;
-            ALOGI("This is first I frame, size:%d.\n", pkt->size);
+            av_log(NULL, AV_LOG_INFO, "This is first I frame, size:%d.\n", pkt->size);
         } else {
-            ALOGI("This is P frame, size:%d, wait first key frame\n", pkt->size);
+            av_log(NULL, AV_LOG_INFO, "This is P frame, size:%d, wait first key frame\n", pkt->size);
             return 0;
         }
     }
