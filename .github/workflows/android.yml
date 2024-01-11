@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
 
     - name: Setup ndk
       run: |
-        yes 2>/dev/null | sudo $ANDROID_HOME/tools/bin/sdkmanager --install "ndk;16.1.4479499" "cmake;3.10.2.4988404"
+        yes 2>/dev/null | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --install "ndk;16.1.4479499" "cmake;3.10.2.4988404"
 
 
     - name: Cache android extra
