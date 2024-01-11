@@ -88,6 +88,8 @@ jobs:
       run: |
         export ANDROID_NDK=$ANDROID_HOME/ndk/16.1.4479499/
         ./gradlew build -PIJK_CXX_STL=c++_shared
+        rm ./fijkplayer-full/build/intermediates/cmake/release/obj/arm64-v8a/libijkffmpeg.so
+        rm ./fijkplayer-full/build/intermediates/cmake/release/obj/x86_64/libijkffmpeg.so
         ./gradlew assembleRelease -PIJK_CXX_STL=c++_shared
 
     - name: Upload apk
