@@ -28,6 +28,10 @@ jobs:
       run: |
         yes 2>/dev/null | sudo /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --install "ndk;16.1.4479499" "cmake;3.10.2.4988404"
 
+    - name: Setup libncurses5
+      run: |
+        sudo apt-get update
+        sudo apt-get install libncurses5
 
     - name: Cache android extra
       uses: actions/cache@v2
