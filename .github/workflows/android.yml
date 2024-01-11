@@ -77,11 +77,11 @@ jobs:
       run: |
         cd android/contrib
         export ANDROID_NDK=$ANDROID_HOME/ndk/16.1.4479499/
-        bash compile-boringssl.sh all64
-        bash compile-libsrt.sh all64
+        bash compile-boringssl.sh all
+        bash compile-libsrt.sh all
         wget --no-check-certificate https://raw.githubusercontent.com/FFmpeg/gas-preprocessor/master/gas-preprocessor.pl
         chmod +x gas-preprocessor.pl && sudo mv gas-preprocessor.pl /usr/local/bin/
-        bash compile-ffmpeg.sh all64
+        bash compile-ffmpeg.sh all
 
     - name: Build with Gradle
       working-directory: android/ijkplayer
