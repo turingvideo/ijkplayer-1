@@ -92,12 +92,12 @@ do_build_libsrt() {
     
     mkdir -p "build/libsrt-$ARCH"
     cd build/libsrt-$ARCH
-    ${ANDROID_HOME}/cmake/3.10.2.4988404/bin/cmake \
+    ${ANDROID_HOME}/cmake/3.18.1/bin/cmake \
         -DANDROID_ABI=${FF_ARCH} \
         -DANDROID_NDK=${ANDROID_NDK} \
         -DCMAKE_ANDROID_API=${API_LEVEL} \
         -DANDROID_NATIVE_API_LEVEL=${API_LEVEL} \
-        -DCMAKE_MAKE_PROGRAM=${ANDROID_HOME}/cmake/3.10.2.4988404/bin/ninja \
+        -DCMAKE_MAKE_PROGRAM=${ANDROID_HOME}/cmake/3.18.1/bin/ninja \
         -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=${FF_PREFIX} \

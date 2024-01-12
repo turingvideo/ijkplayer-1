@@ -179,6 +179,7 @@ typedef struct PacketQueue {
     int alloc_count;
 
     int is_buffer_indicator;
+    bool is_first_key_frame_coming;
 } PacketQueue;
 
 // #define VIDEO_PICTURE_QUEUE_SIZE 3
