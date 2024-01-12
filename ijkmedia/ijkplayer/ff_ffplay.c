@@ -321,7 +321,6 @@ static void control_queue_duration(FFPlayer *ffp, VideoState *is) {
 
 static int packet_queue_put(PacketQueue *q, AVPacket *pkt)
 {
-    av_log(NULL, AV_LOG_INFO, "324 %s, is_fist_key_frame_coming = %d\n", __func__, q->is_first_key_frame_coming);
     // Skip p frames until first I frame coming to avoid the blurred screen
     bool is_key_frame = pkt->flags & AV_PKT_FLAG_KEY;
     if (!q->is_first_key_frame_coming) {
