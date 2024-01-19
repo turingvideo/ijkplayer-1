@@ -170,8 +170,8 @@ static const AVOption ffp_context_options[] = {
         OPTION_OFFSET(video_mime_type),     OPTION_STR(NULL) },
     { "enable-position-notify",             "enable adjective current position notify",
         OPTION_OFFSET(enable_position_notify), OPTION_INT(0, 0, 1) },
-    { "pos-update-interval",             "pos update interval in milliseconds, max 10000, min 10",
-        OPTION_OFFSET(pos_update_interval), OPTION_INT(NOTIFY_KEY_MSG_PER_MILLISECONDS, 10, 10000) },
+    { "pos-update-interval",             "pos update interval in milliseconds, max 1000000, min 10",
+        OPTION_OFFSET(pos_update_interval), OPTION_INT(NOTIFY_KEY_MSG_PER_MILLISECONDS, 10, 1000000) },
 
         // iOS only options
     { "videotoolbox",                       "VideoToolbox: enable",
