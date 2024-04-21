@@ -103,6 +103,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     // IjkMediaPlayer Post Message
     public static final int IJK_MSG_NOP = 0;
     public static final int IJK_MSG_ERROR = 100;
+    public static final int IJK_MSG_LOG = 101;
     public static final int IJK_MSG_PREPARED = 200;
     public static final int IJK_MSG_COMPLETED = 300;
     public static final int IJK_MSG_VIDEO_SIZE_CHANGED = 400;
@@ -1122,6 +1123,13 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
                     player.notifyOnCompletion();
                 }
                 player.stayAwake(false);
+                break;
+            case IJK_MSG_LOG:
+                DebugLog.i(TAG, "Log (" + msg.arg1 + "," + msg.arg2 + "," + msg.obj + ")");
+                if (msg.obj != null) {
+                    IjkTimedText text = new IjkTimedText(new Rect(0, 0, 0, 0), (String)msg.obj);
+                    player.notifyOnTimedText(text);
+                }
                 break;
             case IJK_MSG_VIDEO_SNAP_SHOT:
                 DebugLog.i(TAG, "OnSnapShot:" + msg.arg1 + ":" + msg.arg2);
