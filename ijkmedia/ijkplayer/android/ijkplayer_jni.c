@@ -944,6 +944,16 @@ static void message_loop_n(JNIEnv *env, IjkMediaPlayer *mp)
                 post_event(env, weak_thiz, msg.what, msg.arg1, msg.arg2);
             }
             break;
+        case FFP_MSG_LOG:
+            MPTRACE("FFP_MSG_Log: %d\n", msg.arg1);
+            if (msg.obj) {
+                jstring text = (*env)->NewStringUTF(env, (const char *)msg.obj);
+                post_event2(env, weak_thiz, msg.what, msg.arg1, msg.arg2, text);
+                J4A_DeleteLocalRef__p(env, &text);
+            } else {
+                post_event(env, weak_thiz, msg.what, msg.arg1, msg.arg2);
+            }
+            break;
         case FFP_MSG_PREPARED:
             MPTRACE("FFP_MSG_PREPARED:\n");
             post_event(env, weak_thiz, msg.what, msg.arg1, msg.arg2);

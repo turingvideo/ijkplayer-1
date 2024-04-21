@@ -5381,6 +5381,5 @@ void pop_av_log(FFPlayer *ffp, void *avcl, int level, const char *fmt, ...) {
     int buffer_length;
     buffer_length = (int) strlen(buffer) + 1;
 
-    ffp_notify_msg4(ffp, FFP_MSG_LOG, 0, 0, buffer,
-                    buffer_length);
+    ffp_notify_msg4(ffp, FFP_MSG_LOG, 0, 0, buffer, buffer_length);
 }
