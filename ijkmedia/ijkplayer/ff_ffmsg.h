@@ -27,6 +27,7 @@
 
 #define FFP_MSG_FLUSH                       0
 #define FFP_MSG_ERROR                       100     /* arg1 = error */
+#define FFP_MSG_LOG                         101     // arg1 = log message
 #define FFP_MSG_PREPARED                    200
 #define FFP_MSG_COMPLETED                   300
 #define FFP_MSG_VIDEO_SIZE_CHANGED          400     /* arg1 = width, arg2 = height */
