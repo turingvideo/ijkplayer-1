@@ -1352,7 +1352,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     public void resetListeners() {
         super.resetListeners();
         mOnMediaCodecSelectListener = null;
-        mEventListeners.clear()
+        mEventListeners.clear();
     }
 
     @CalledByNative
